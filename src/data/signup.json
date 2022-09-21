@@ -1,0 +1,17 @@
+[
+    {
+        "name": "fullname",
+        "type": "text",
+        "label": "Full name"
+    },  
+    {
+        "name": "email",
+        "type": "text",
+        "label": "Email"
+    },  
+    {
+        "name": "password",
+        "type": "text",
+        "label": "Password"
+    }
+]
