@@ -1,74 +1,85 @@
-import React from 'react';
-import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
-import tasks from '../data/tasks.json';
+import { useState } from 'react';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
-function Tasks() {
-  const [taskRoll, setTaskRoll] = React.useState(tasks);
+function Tasks({ data, deleteTask }) {
+  const [taskRoll, setTaskRoll] = useState(data);
+
   const handleOnDragEnd = (result) => {
     if (!result.destination) return;
     const tasks = Array.from(taskRoll);
     const [reorderedItems] = tasks.splice(result.source.index, 1);
     tasks.splice(result.destination.index, 0, reorderedItems);
+
     setTaskRoll(tasks);
   };
 
   return (
-    <div
-      id='tasks'
-      className='container mt-1 d-flex flex-column flex-md-row justify-content-md-center'>
-      <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Droppable droppableId='tasket'>
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className='col-12 col-md-6 mb-4 mb-md-2'>
-              <div className='col-md-11 d-flex flex-column'>
-                <header className='py-3 px-2 bg-primary fw-bold text-light'>
-                  Daily tasks
-                </header>
-                <div className='pt-2 pb-5 border border-3 text-dark'>
-                  {tasks.map(({ item, id }, index) => {
-                    return (
-                      <Draggable key={id} draggableId={id} index={index}>
-                        {(provided) => {
-                          return (
-                            <p
-                              key={id}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              ref={provided.innerRef}
-                              className='p_tasks'>
-                              {item}
-                            </p>
-                          );
-                        }}
-                        {provided.placeholder}
-                      </Draggable>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          )}
-        </Droppable>
-        <Droppable id='taskekter'>
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className='col-12 col-md-6 mb-4 mb-md-2 h-100'>
-              <div className='col-md-11 d-flex flex-column'>
-                <header className='py-3 px-2 bg-primary fw-bold text-light'>
-                  Weekly tasks
-                </header>
-                <div className='pt-2 pb-5 border border-3 px-2'>
+    <div className='d-flex justify-content-between'>
+      <DragDropContext onDragEnd={handleOnDragEnd} className=''>
+        <div className='' style={{ width: '48.5%' }}>
+          <Droppable droppableId='tasket'>
+            {(provided) => {
+              return (
+                <div
+                  id='tasket'
+                  className='weekly box'
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  style={{ overflowX: 'hidden' }}>
+                  <h3>Weekly Tasks</h3>
+                  {data.map(
+                    ({ id, name, time_created, scrumgoalhistory_set }, idx) => {
+                      return (
+                        <Draggable draggableId={`${id}`} index={idx} key={id}>
+                          {(provided) => {
+                            return (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                className='single_task'
+                                onClick={deleteTask}>
+                                {name}{' '}
+                                <div>
+                                  {time_created.slice(0, 10)} at{' '}
+                                  {time_created.slice(12, 16)}
+                                </div>
+                                <div className='text_top'>
+                                  {scrumgoalhistory_set.map(
+                                    ({ id, done_by }) => (
+                                      <p key={id}>{done_by}</p>
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          }}
+                        </Draggable>
+                      );
+                    }
+                  )}
                   {provided.placeholder}
                 </div>
-              </div>
-            </div>
-          )}
-        </Droppable>
+              );
+            }}
+          </Droppable>
+        </div>
+        <div className='' style={{ width: '48.5%' }}>
+          <Droppable droppableId='tasketer'>
+            {(provided) => {
+              return (
+                <div
+                  className='daily box'
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  style={{ overflowX: 'hidden' }}>
+                  <h3>Daily Tasks</h3>
+                  {provided.placeholder}
+                </div>
+              );
+            }}
+          </Droppable>
+        </div>
       </DragDropContext>
     </div>
   );

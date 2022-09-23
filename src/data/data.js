@@ -1,7 +1,7 @@
 
 const data = {
   fullname: "Jaypee",
-  email: "jaypeedeforyou",
+  email: "jaypeedeforyou@gmail.com",
   user: "Owner",
   project: "Srumboard"
 }

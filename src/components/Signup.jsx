@@ -23,7 +23,7 @@ function Signup() {
         console.log('sign up successful')
     }
   return (
-    <div className='container'>
+    <div className=''>
       <div>
         <div className='text-center'>
           <h3>CHATSCRUM</h3>
